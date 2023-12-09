@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form - Firebase</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <form id="loginForm">
+        <h1>Login</h1>
+
+        <label for="username">Email or Phone Number:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="button" onclick="login()">Login</button>
+
+        <div class="options">
+            <a href="#" onclick="resetPassword()">Forgot password?</a>
+            <span> | </span>
+            <a href="#">Need help?</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth.js"></script>
+<script>
+  // Firebase authentication logic
+  function login() {
+    const emailOrPhone = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    firebase.auth().signInWithEmailAndPassword(emailOrPhone, password)
+      .then((userCredential) => {
+        // User is signed in
+        const user = userCredential.user;
+        console.log("User signed in:", user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error("Authentication failed:", errorCode, errorMessage);
+      });
+  }
+
+  function resetPassword() {
+    const emailOrPhone = document.getElementById("username").value;
+
+    firebase.auth().sendPasswordResetEmail(emailOrPhone)
+      .then(() => {
+        console.log("Password reset email sent");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error("Password reset failed:", errorCode, errorMessage);
+      });
+  }
+</script>
+
+</body>
+</html>
